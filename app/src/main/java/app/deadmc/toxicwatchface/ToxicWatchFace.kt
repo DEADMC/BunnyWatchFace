@@ -81,6 +81,7 @@ class ToxicWatchFace : CanvasWatchFaceService() {
 
         private lateinit var mBackgroundPaint: Paint
         private lateinit var mTextPaint: Paint
+        private lateinit var mSecondsPaint: Paint
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -120,7 +121,14 @@ class ToxicWatchFace : CanvasWatchFaceService() {
             mTextPaint = Paint().apply {
                 typeface = NORMAL_TYPEFACE
                 isAntiAlias = true
-                color = ContextCompat.getColor(applicationContext, R.color.digital_text)
+                color = ContextCompat.getColor(applicationContext, R.color.toxic)
+            }
+
+            mSecondsPaint = Paint().apply {
+                color = ContextCompat.getColor(applicationContext,R.color.toxic)
+                isAntiAlias = true
+                strokeWidth = 15f
+                style = Paint.Style.STROKE
             }
         }
 
@@ -193,9 +201,18 @@ class ToxicWatchFace : CanvasWatchFaceService() {
                 String.format("%d:%02d", mCalendar.get(Calendar.HOUR),
                         mCalendar.get(Calendar.MINUTE))
             else
-                String.format("%d:%02d:%02d", mCalendar.get(Calendar.HOUR),
+                String.format("%d:%02d:%02d", mCalendar.get(Calendar.HOUR_OF_DAY),
                         mCalendar.get(Calendar.MINUTE), mCalendar.get(Calendar.SECOND))
             canvas.drawText(text, mXOffset, mYOffset, mTextPaint)
+
+            val radius = bounds.width()*0.5.toFloat()
+            val left = -radius
+            val right = radius
+            val top = -radius
+            val bottom = radius
+            //val sweepAngle = (360f-mCalendar.get(Calendar.SECOND)*6f)%360f
+            val sweepAngle = mCalendar.get(Calendar.SECOND)*6f+mCalendar.get(Calendar.MILLISECOND)*0.006f
+            canvas.drawArc(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(),-90f, sweepAngle,false,mSecondsPaint)
         }
 
         override fun onVisibilityChanged(visible: Boolean) {

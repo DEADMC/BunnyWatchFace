@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.res.ResourcesCompat
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceService
 import android.support.wearable.watchface.WatchFaceStyle
@@ -119,7 +120,7 @@ class ToxicWatchFace : CanvasWatchFaceService() {
 
             // Initializes Watch Face.
             mTextPaint = Paint().apply {
-                typeface = NORMAL_TYPEFACE
+                typeface = ResourcesCompat.getFont(this@ToxicWatchFace,R.font.capture_it)
                 isAntiAlias = true
                 color = ContextCompat.getColor(applicationContext, R.color.toxic)
             }

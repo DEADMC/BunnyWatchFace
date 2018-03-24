@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
@@ -17,7 +16,6 @@ import android.support.v4.content.res.ResourcesCompat
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceService
 import android.support.wearable.watchface.WatchFaceStyle
-import android.util.Log
 import android.view.SurfaceHolder
 import android.view.WindowInsets
 import android.widget.Toast
@@ -47,7 +45,7 @@ class ToxicWatchFace : CanvasWatchFaceService() {
          * Updates rate in milliseconds for interactive mode. We update once a second since seconds
          * are displayed in interactive mode.
          */
-        private const val INTERACTIVE_UPDATE_RATE_MS = 100
+        private const val INTERACTIVE_UPDATE_RATE_MS = 1000
 
         /**
          * Handler message id for updating the time periodically in interactive mode.
@@ -81,7 +79,8 @@ class ToxicWatchFace : CanvasWatchFaceService() {
         private var mXOffset: Float = 0F
         private var mYOffset: Float = 0F
 
-        private lateinit var mBackgroundPaint: Paint
+        private lateinit var drawerHelper: DisplayHelper
+
         private lateinit var mTextPaint: Paint
         private lateinit var mSecondsPaint: Paint
 
@@ -109,29 +108,8 @@ class ToxicWatchFace : CanvasWatchFaceService() {
                     .setAcceptsTapEvents(true)
                     .build())
 
-            mCalendar = Calendar.getInstance()
+            drawerHelper = DisplayHelper(applicationContext)
 
-            val resources = this@ToxicWatchFace.resources
-            mYOffset = resources.getDimension(R.dimen.digital_y_offset)
-
-            // Initializes background.
-            mBackgroundPaint = Paint().apply {
-                color = ContextCompat.getColor(applicationContext, R.color.background)
-            }
-
-            // Initializes Watch Face.
-            mTextPaint = Paint().apply {
-                typeface = ResourcesCompat.getFont(this@ToxicWatchFace,R.font.circe_regular)
-                isAntiAlias = true
-                color = ContextCompat.getColor(applicationContext, R.color.toxic)
-            }
-
-            mSecondsPaint = Paint().apply {
-                color = ContextCompat.getColor(applicationContext,R.color.toxic)
-                isAntiAlias = true
-                strokeWidth = 20f
-                style = Paint.Style.STROKE
-            }
         }
 
         override fun onDestroy() {
@@ -155,6 +133,7 @@ class ToxicWatchFace : CanvasWatchFaceService() {
         override fun onAmbientModeChanged(inAmbientMode: Boolean) {
             super.onAmbientModeChanged(inAmbientMode)
             mAmbient = inAmbientMode
+            drawerHelper.ambientMode = inAmbientMode
 
             if (mLowBitAmbient) {
                 mTextPaint.isAntiAlias = !inAmbientMode
@@ -190,24 +169,12 @@ class ToxicWatchFace : CanvasWatchFaceService() {
             val TAG = "onDraw"
             //Log.e("onDraw", "called")
             // Draw the background.
-            if (mAmbient) {
-                canvas.drawColor(Color.BLACK)
-            } else {
-                canvas.drawRect(
-                        0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), mBackgroundPaint)
-            }
 
-            // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
-            val now = System.currentTimeMillis()
-            mCalendar.timeInMillis = now
 
-            val text = if (mAmbient)
-                String.format("%d:%02d", mCalendar.get(Calendar.HOUR_OF_DAY),
-                        mCalendar.get(Calendar.MINUTE))
-            else
-                String.format("%d:%02d", mCalendar.get(Calendar.HOUR_OF_DAY),
-                        mCalendar.get(Calendar.MINUTE))
+            drawerHelper.draw(canvas,bounds)
 
+
+            /*
             val textBounds = Rect()
             mTextPaint.getTextBounds(text,0,text.length,textBounds)
             mXOffset = bounds.width()*0.5f-textBounds.width()*0.5f
@@ -222,13 +189,10 @@ class ToxicWatchFace : CanvasWatchFaceService() {
 
 
             val radius = bounds.width()*0.5.toFloat()
-            val left = -radius
-            val right = radius
-            val top = -radius
-            val bottom = radius
             //val sweepAngle = (360f-mCalendar.get(Calendar.SECOND)*6f)%360f
             val sweepAngle = mCalendar.get(Calendar.SECOND)*6f+mCalendar.get(Calendar.MILLISECOND)*0.006f
             canvas.drawArc(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(),-90f, sweepAngle,false,mSecondsPaint)
+            */
         }
 
         override fun onVisibilityChanged(visible: Boolean) {
@@ -238,7 +202,7 @@ class ToxicWatchFace : CanvasWatchFaceService() {
                 registerReceiver()
 
                 // Update time zone in case it changed while we weren't visible.
-                mCalendar.timeZone = TimeZone.getDefault()
+                //mCalendar.timeZone = TimeZone.getDefault()
                 invalidate()
             } else {
                 unregisterReceiver()
@@ -287,7 +251,7 @@ class ToxicWatchFace : CanvasWatchFaceService() {
                         R.dimen.digital_text_size
             )
 
-            mTextPaint.textSize = textSize
+            //mTextPaint.textSize = textSize
         }
 
         /**

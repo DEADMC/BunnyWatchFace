@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+
+
 
 
 
@@ -26,6 +26,7 @@ class DisplayHelper(val applicationContext:Context) {
     var secondAngle = 0f
     var ambientMode = false
     var backgroundImage:Bitmap
+    var clockHandImage:Bitmap
 
     init {
         backgroundPaint.apply {
@@ -39,6 +40,7 @@ class DisplayHelper(val applicationContext:Context) {
             inPreferredConfig = Bitmap.Config.ARGB_8888
         }
         backgroundImage = BitmapFactory.decodeResource(resources, R.drawable.background,options)
+        clockHandImage = BitmapFactory.decodeResource(resources, R.drawable.clock_hand,options)
 
         textPaint.apply {
             typeface = ResourcesCompat.getFont(applicationContext,R.font.circe_regular)
@@ -74,6 +76,8 @@ class DisplayHelper(val applicationContext:Context) {
         canvas.drawBitmap(backgroundImage,null,bounds,backgroundPaint)
 
         canvas.drawArc(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(),-90f, secondAngle,false,secondsPaint)
+
+
         /*
         if (ambientMode) {
             canvas.drawColor(Color.BLACK)
@@ -82,6 +86,10 @@ class DisplayHelper(val applicationContext:Context) {
                     0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(), backgroundPaint)
         }
         */
+
+    }
+
+    fun drawHourClockHand(canvas: Canvas, bounds: Rect) {
 
     }
 }

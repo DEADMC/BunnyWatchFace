@@ -40,7 +40,7 @@ class DisplayHelper(val applicationContext:Context) {
             inPreferredConfig = Bitmap.Config.ARGB_8888
         }
         backgroundImage = BitmapFactory.decodeResource(resources, R.drawable.background,options)
-        clockHandImage = BitmapFactory.decodeResource(resources, R.drawable.clock_hand,options)
+        clockHandImage = BitmapFactory.decodeResource(resources, R.drawable.clock_hand_white,options)
 
         textPaint.apply {
             typeface = ResourcesCompat.getFont(applicationContext,R.font.circe_regular)
@@ -60,6 +60,7 @@ class DisplayHelper(val applicationContext:Context) {
         timeHelper.refresh()
         calculateParameters(bounds)
         drawBackground(canvas,bounds)
+        drawHourClockHand(canvas,bounds)
     }
 
     fun calculateParameters(bounds: Rect) {
@@ -78,6 +79,7 @@ class DisplayHelper(val applicationContext:Context) {
         canvas.drawArc(0f, 0f, bounds.width().toFloat(), bounds.height().toFloat(),-90f, secondAngle,false,secondsPaint)
 
 
+
         /*
         if (ambientMode) {
             canvas.drawColor(Color.BLACK)
@@ -90,7 +92,13 @@ class DisplayHelper(val applicationContext:Context) {
     }
 
     fun drawHourClockHand(canvas: Canvas, bounds: Rect) {
-
+        //canvas.rotate(90f)
+        val rotator = Matrix()
+        rotator.postRotate(90f)
+        rotator.postTranslate(bounds.exactCenterX(), bounds.exactCenterY())
+        //canvas.drawBitmap(clockHandImage,bounds.exactCenterX()-clockHandImage.width/2,bounds.exactCenterY()-clockHandImage.height/2,backgroundPaint)
+        canvas.drawBitmap(clockHandImage,rotator,backgroundPaint)
+        //canvas.rotate(0f)
     }
 }
 

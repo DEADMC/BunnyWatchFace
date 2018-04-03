@@ -21,7 +21,7 @@ class TimeHelper() {
 
     fun getMinute():Int = calendar.get(Calendar.MINUTE)
 
-    fun getHour():Int = calendar.get(Calendar.HOUR_OF_DAY)
+    fun getHour():Int = calendar.get(Calendar.HOUR)
 
 
 

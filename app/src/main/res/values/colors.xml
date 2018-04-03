@@ -3,4 +3,5 @@
     <color name="background">#000000</color>
     <color name="digital_text">#ffffff</color>
     <color name="toxic">#64ea0a</color>
+    <color name="clockhand_color">#e3eeff</color>
 </resources>

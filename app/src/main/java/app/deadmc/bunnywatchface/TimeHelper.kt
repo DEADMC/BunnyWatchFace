@@ -1,4 +1,4 @@
-package app.deadmc.toxicwatchface
+package app.deadmc.bunnywatchface
 
 import java.util.*
 

@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "app.deadmc.toxicwatchface"
+        applicationId "app.deadmc.bunnywatchface"
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 1

@@ -1,4 +1,4 @@
-package app.deadmc.toxicwatchface
+package app.deadmc.bunnywatchface
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -11,8 +11,6 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
 import android.support.wearable.watchface.CanvasWatchFaceService
 import android.support.wearable.watchface.WatchFaceService
 import android.support.wearable.watchface.WatchFaceStyle
@@ -142,6 +140,7 @@ class ToxicWatchFace : CanvasWatchFaceService() {
             // Whether the timer should be running depends on whether we're visible (as well as
             // whether we're in ambient mode), so we may need to start or stop the timer.
             updateTimer()
+            drawerHelper.ambientMode = inAmbientMode
         }
 
         /**
@@ -156,11 +155,11 @@ class ToxicWatchFace : CanvasWatchFaceService() {
                 WatchFaceService.TAP_TYPE_TOUCH_CANCEL -> {
                     // The user has started a different gesture or otherwise cancelled the tap.
                 }
-                WatchFaceService.TAP_TYPE_TAP ->
+                WatchFaceService.TAP_TYPE_TAP -> {}
                     // The user has completed the tap gesture.
                     // TODO: Add code to handle the tap gesture.
-                    Toast.makeText(applicationContext, R.string.message, Toast.LENGTH_SHORT)
-                            .show()
+
+                    //Toast.makeText(applicationContext, R.string.message, Toast.LENGTH_SHORT).show()
             }
             invalidate()
         }

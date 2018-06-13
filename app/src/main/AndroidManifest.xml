@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.deadmc.toxicwatchface">
+    package="app.deadmc.bunnywatchface">
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -19,7 +19,7 @@
             android:value="true" />
 
         <service
-            android:name=".ToxicWatchFace"
+            android:name="app.deadmc.bunnywatchface.ToxicWatchFace"
             android:label="@string/my_digital_name"
             android:permission="android.permission.BIND_WALLPAPER">
             <meta-data
